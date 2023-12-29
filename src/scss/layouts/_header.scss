@@ -1,0 +1,6 @@
+@use "../components/" as *;
+
+.test6 {
+    font-size: 32px;
+    border-image: url("bg_dot.png") 15 round;
+}

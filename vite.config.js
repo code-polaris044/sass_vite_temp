@@ -26,5 +26,8 @@ export default defineConfig({
                 entryFileNames: "assets/js/[name].js",
             },
         },
+        css: {
+            minify: false, // CSSの最小化を無効にする
+        },
     },
 });
