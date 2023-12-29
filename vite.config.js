@@ -1,4 +1,80 @@
 import { defineConfig } from "vite";
+import { resolve } from "path";
+
+// HTMLの複数出力を自動化する
+//./src配下のファイル一式を取得
+import fs from "fs";
+import path from "path";
+import handlebars from "vite-plugin-handlebars";
+
+const pageData = {
+    "/index.html": {
+        isHome: true,
+        title: "Main Page",
+    },
+    "/list.html": {
+        isHome: false,
+        title: "List Page",
+    },
+};
+
+const files = [];
+function readDirectory(dirPath) {
+    const items = fs.readdirSync(dirPath);
+
+    for (const item of items) {
+        const itemPath = path.join(dirPath, item);
+
+        if (fs.statSync(itemPath).isDirectory()) {
+            // componentsディレクトリを除外する
+            if (item === "components") {
+                continue;
+            }
+
+            readDirectory(itemPath);
+        } else {
+            // htmlファイル以外を除外する
+            if (path.extname(itemPath) !== ".html") {
+                continue;
+            }
+
+            // nameを決定する
+            let name;
+            if (dirPath === path.resolve(__dirname, "src")) {
+                name = path.parse(itemPath).name;
+            } else {
+                const relativePath = path.relative(
+                    path.resolve(__dirname, "src"),
+                    dirPath
+                );
+                const dirName = relativePath.replace(/\//g, "_");
+                name = `${dirName}_${path.parse(itemPath).name}`;
+            }
+
+            // pathを決定する
+            const relativePath = path.relative(
+                path.resolve(__dirname, "src"),
+                itemPath
+            );
+            const filePath = `/${relativePath}`;
+
+            files.push({ name, path: filePath });
+        }
+    }
+}
+readDirectory(path.resolve(__dirname, "src"));
+const inputFiles = {};
+for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    inputFiles[file.name] = resolve(__dirname, "./src" + file.path);
+}
+/*
+  この形を自動的に作る
+  input:{
+    index: resolve(__dirname, './src/index.html'),
+    list: resolve(__dirname, './src/list.html')
+  }
+*/
 
 export default defineConfig({
     root: "./src", //開発ディレクトリ設定
@@ -25,9 +101,18 @@ export default defineConfig({
                 chunkFileNames: "assets/js/[name].js",
                 entryFileNames: "assets/js/[name].js",
             },
-        },
-        css: {
-            minify: false, // CSSの最小化を無効にする
+            //生成オブジェクトを渡す
+            input: inputFiles,
         },
     },
+    plugins: [
+        handlebars({
+            //コンポーネントの格納ディレクトリを指定
+            partialDirectory: resolve(__dirname, "./src/components"),
+            //各ページ情報の読み込み
+            context(pagePath) {
+                return pageData[pagePath];
+            },
+        }),
+    ],
 });
