@@ -1,6 +1,27 @@
 @use "../components/" as *;
 
-.test6 {
-    font-size: 32px;
-    border-image: url("bg_dot.png") 15 round;
+.l_header {
+    background-color: hsla(48, 100%, 60%, 1);
+}
+
+.l_header_wrap {
+    width: min(100% - 64px, 1500px);
+    margin: 25px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.uq_header_logo {
+    width: 142px;
+    height: 42px;
+
+    .uq_header_logo {
+        object-fit: cover;
+    }
+}
+
+.l_nav_pc_wrap {
+    display: flex;
+    gap: 16px;
 }
