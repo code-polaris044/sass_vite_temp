@@ -1,2 +1,49 @@
 // mixin
 @use "variable" as *;
+
+///
+/// @param {*} $media-width
+/// @param {*} {@if$media-width==sp{@mediaonlyscreenand(width<=$sp
+/// @param {*} {@content;}}@elseif$media-width==tab{@mediaonlyscreenand(width<=$tab
+/// @param {*} {@content;}}@elseif$media-width==pc{@mediaonlyscreenand(width<=$pc
+
+@mixin media($media-width) {
+    @if $media-width == sp {
+        @media only screen and (width <= $sp) {
+            @content;
+        }
+    } @else if $media-width == tab {
+        @media only screen and (width <= $tab) {
+            @content;
+        }
+    } @else if $media-width == pc {
+        @media only screen and (width <= $pc) {
+            @content;
+        }
+    }
+}
+
+@mixin boder-test($color: #333, $b-radius: 15px) {
+    border: 1px solid $color;
+    border-radius: $b-radius;
+}
+
+// ,を使うセレクタは下記みたいに初期値を入力する方法もあるが、可変長引数の方が可読性がある
+// @mixin shadow(
+//     $vslue: (
+//         (8px 8px 0 #999, 15px -10px 0 #eee),
+//     )
+// ) {
+//     text-shadow: $vslue;
+// }
+
+@mixin shadow($vslue...) {
+    text-shadow: $vslue;
+}
+
+@mixin boxBase($w: 250px, $pd: 15px, $bg_c: #fff, $bd_c: #ccc) {
+    width: $w;
+    padding: $pd;
+    background-color: $bg_c;
+    border: 1px solid $bd_c;
+}

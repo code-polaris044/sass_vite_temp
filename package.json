@@ -13,6 +13,7 @@
         "css-declaration-sorter": "^7.1.1",
         "postcss": "^8.4.32",
         "sass": "^1.69.6",
+        "sassdoc": "^2.7.4",
         "vite": "^5.0.8"
     },
     "main": "index.js",

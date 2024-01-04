@@ -1,0 +1,7 @@
+@use "variable" as *;
+
+/// @paramyar {*} $e 初期値:[$w-1000]
+
+@function helfSize($e: $w-1000) {
+    @return round($e/2);
+}

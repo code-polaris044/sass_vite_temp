@@ -1,1 +1,48 @@
-@use "../components/"as *;
+@use "../components/" as *;
+
+/// @deprecated
+.btn_test {
+    @extend %btnBase;
+
+    margin-top: 50px;
+}
+
+.app {
+    @include boder-test(red, 5px);
+}
+
+.title {
+    @include shadow((8px 8px 0 red, 15px -10px 0 #eee));
+}
+
+$vslues: 300px, 20px;
+
+.item {
+    @include boxBase($vslues...);
+}
+
+.ul {
+    background-color: red;
+    width: helfSize(800px);
+}
+
+// 型判定
+.date::after {
+    content: quote(type-of(red));
+}
+
+.if {
+    width: 100%;
+    background-color: red;
+    @include media(pc) {
+        background-color: blue;
+    }
+
+    @include media(tab) {
+        background-color: yellow;
+    }
+
+    @include media(sp) {
+        background-color: orchid;
+    }
+}
